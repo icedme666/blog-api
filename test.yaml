@@ -1,0 +1,299 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    app.oam.dev/appinstanceoam-default-complete: "true"
+    app.oam.dev/generation: "6"
+    app.oam.dev/hpa: "true"az-from-depconf: sg2
+    config-enable: "true"
+    deployment.kubernetes.io/revision: "16"
+    kube-platform.shopee.io/application: gxm-demo
+    kube-platform.shopee.io/cid: sg
+    kube-platform.shopee.io/env: test
+    kube-platform.shopee.io/group: Infrastructure-Team
+    kube-platform.shopee.io/project: gxm
+    kube-platform.shopee.io/sdu: gxm-demo-test-sg
+    kube-platform.shopee.io/update-from-agent: 2022-08-31 16:42:36 +0800
+    open-api-version: 1.0.2
+  creationTimestamp: "2022-08-26T07:33:50Z"
+  generation: 16
+  labels:
+    app.oam.dev/app-revision-hash: 54841e6c5a27fabd
+    app.oam.dev/appinstanceoam-name: demo-test-sg-cmk28tm33j95
+    app.oam.dev/component: demo-test-sg-cmk28tm33j95
+    app.oam.dev/name: demo-test-sg-cmk28tm33j95
+    app.oam.dev/resourceType: WORKLOAD
+    app.oam.dev/revision: demo-test-sg-cmk28tm33j95-v15
+    application: gxm-demo
+    cid: sg
+    env: test
+    group: Infrastructure-Team
+    phase: green
+    project: gxm
+    tenant: Infrastructure-Team
+    workload.oam.dev/type: pipeline-deployment
+  name: gxm-demo-test-sg-green
+  namespace: gxm-test-sg
+  resourceVersion: "826301904"
+  uid: ffe10610-ec8c-49a9-8df6-e48a554a1163
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      application: gxm-demo
+      cid: sg
+      env: test
+      group: Infrastructure-Team
+      phase: green
+      project: gxm
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        containers-label.alpha.kubernetes.io/service_name: shopee.testbryson1.k8s.gxm
+        kube-platform.shopee.io/application: gxm-demo
+        kube-platform.shopee.io/cid: sg
+        kube-platform.shopee.io/deploy_id: "1661935356755942700"
+        kube-platform.shopee.io/env: test
+        kube-platform.shopee.io/group: Infrastructure-Team
+        kube-platform.shopee.io/module: demo
+        kube-platform.shopee.io/project: gxm
+        kube-platform.shopee.io/sdu: gxm-demo-test-sg
+        kube-platform.shopee.io/target_replicas: "1"
+        kube-platform.shopee.io/tenant_id: "3973"
+        kube-platform.shopee.io/update-from-agent: 2022-08-31 16:42:36 +0800
+        prometheus.io/path: /metrics
+        prometheus.io/port: "9090"
+        prometheus.io/scrape: "false"
+      creationTimestamp: null
+      labels:
+        application: gxm-demo
+        cid: sg
+        env: test
+        group: Infrastructure-Team
+        phase: green
+        project: gxm
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    application: gxm-demo
+                    cid: sg
+                    env: test
+                    group: Infrastructure-Team
+                    project: gxm
+                topologyKey: kubernetes.io/hostname
+              weight: 10
+      containers:
+        - command:
+            - bash
+            - -c
+            - sleep 1 && exec ski run -e test -c sg -i sg2
+          env:
+            - name: AGENT_IP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.hostIP
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: CPUS
+              valueFrom:
+                resourceFieldRef:
+                  divisor: "1"
+                  resource: limits.cpu
+            - name: MEM
+              valueFrom:
+                resourceFieldRef:
+                  divisor: 1Mi
+                  resource: limits.memory
+            - name: ZK_URL
+              value: zk://zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181/mesos-test-sg2
+            - name: ENV
+              value: test
+            - name: env
+              value: test
+            - name: CID
+              value: sg
+            - name: cid
+              value: sg
+            - name: SERVICES_FILE_PATH
+              value: service_deps/services.json
+            - name: SERVICE_NAME
+              value: gxm-demo-test-sg
+            - name: MESOS_TASK_ID
+              value: gxm-demo-test-sg.191217113936295952.191217113936295952
+            - name: CONFIG_FILE_PATH
+              value: service_deps/config.json
+            - name: LANG
+              value: C.UTF-8
+            - name: RUNNING_CONTEXT
+              value: docker
+            - name: IDC
+              value: sg2
+            - name: AZV2
+            - name: MARATHON_APP_INSTANCES
+              value: "1"
+            - name: INSTANCES_COUNT_DESIRED
+              value: "1"
+            - name: PROJECT_NAME
+              value: gxm
+            - name: MODULE_NAME
+              value: demo
+            - name: INDEX
+              value: "1"
+            - name: PORT_prometheus
+              value: "9090"
+            - name: PATH_PROMETHEUS
+              value: /metrics
+            - name: ENABLE_PROMETHEUS
+              value: "false"
+            - name: DEFAULT_UNREGISTER_DEADLINE_SECONDS
+              value: "5"
+            - name: DEFAULT_TERMINATE_DEADLINE_SECONDS
+              value: "8"
+            - name: PORT
+              value: "8080"
+          image: harbor.test.shopeemobile.com/shopee/gxm-demo-test-sg:ce2f43b11539_1274
+          imagePullPolicy: Always
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - bash
+                  - -c
+                  - |
+                    bash  <<EOF
+                    
+                    export SDU4="gxm-demo-test-sg"
+                    
+                    export BASE_LOG_DIR="\$POD_NAME"
+                    
+                    rm -rf log
+                    if [ "\$USE_NEW_LOG_FORMAT" != "1" ]; then
+                        mkdir -p /data/log/\$BASE_LOG_DIR
+                        ln -s /data/log/\$BASE_LOG_DIR log
+                    else
+                        ln -s /data/log/\$SDU4 log
+                    fi
+                    
+                    python -c '
+                    import sys,json
+                    app="demo"
+                    specf="deploy/ski/liveness_with_http_without_expose_port.json"
+                    with open(specf) as f:
+                        spec = json.load(f)
+                    try:
+                        del spec["per_feature_branch"]
+                    except KeyError:
+                        pass
+                    
+                    
+                    try:
+                        del spec["run"]["smoke"]
+                    except KeyError:
+                        pass
+                    
+                    spec["run"]["acquire_prometheus_port"] = False
+                    spec["run"]["enable_prometheus"] = False
+                    pds = spec.get("run", {}).get("port_definitions", [])
+                    
+                    new_pds = []
+                    
+                    new_pds.append({"submodule": app, "port": 8080})
+                    
+                    port = 8081
+                    for pd in pds:
+                        if pd.get("submodule", "") == app:
+                            continue
+                        elif pd.get("submodule", "") != "":
+                    
+                            pd["expose_port"] = port
+                            new_pds.append(pd)
+                            port += 1
+                    spec["run"]["port_definitions"] = new_pds
+                    
+                    with open(specf, "w") as f:
+                        f.write(json.dumps(spec, indent=4))
+                    '
+                    EOF
+            preStop:
+              exec:
+                command:
+                  - bash
+                  - -c
+                  - sleep 15
+          livenessProbe:
+            failureThreshold: 7
+            httpGet:
+              path: /api
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 6
+          name: gxm-demo-test-sg
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2Gi
+            requests:
+              cpu: 200m
+              memory: 214748364800m
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /etc/mesos
+              name: mesos
+            - mountPath: /data/log
+              name: log
+            - mountPath: /run/spex
+              name: spex-domainsocket
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - configMap:
+            defaultMode: 420
+            name: mesos
+          name: mesos
+        - hostPath:
+            path: /data/log/gxm-demo-test-sg
+            type: DirectoryOrCreate
+          name: log
+        - hostPath:
+            path: /run/spex/
+            type: DirectoryOrCreate
+          name: spex-domainsocket
+        - hostPath:
+            path: /var/lib/docker
+            type: Directory
+          name: docker-path

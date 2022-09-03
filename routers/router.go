@@ -2,18 +2,38 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"xiamei.guo/blog-api/docs"
 	"xiamei.guo/blog-api/middleware/jwt"
 	"xiamei.guo/blog-api/pkg/setting"
 	"xiamei.guo/blog-api/routers/api"
 	"xiamei.guo/blog-api/routers/api/v1"
 )
 
+// @contact.name   API Support
+// @contact.url    http://www.swagger.io/support
+// @contact.email  support@swagger.io
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 func InitRouter() *gin.Engine {
+	// programatically set swagger info
+	docs.SwaggerInfo.Title = "Swagger Example API"
+	docs.SwaggerInfo.Description = "This is a sample server Petstore server."
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.Host = "petstore.swagger.io"
+	docs.SwaggerInfo.BasePath = "/v1"
+	docs.SwaggerInfo.Schemes = []string{"http", "https"}
+
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 	gin.SetMode(setting.RunMode)
 
+	// use ginSwagger middleware to serve the API docs
+	r.GET("/test")
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.GET("/auth", api.GetAuth)
 	apiv1 := r.Group("/api/v1")
 	apiv1.Use(jwt.JWT())

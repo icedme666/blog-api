@@ -1,6 +1,8 @@
 # blog-api
 
-# How to use
+# Feature
+* Auth(jwt)
+  + GET http://127.0.0.1:8000/auth?username=test&password=test123456
 * Tag
   + GET http://127.0.0.1:8000/api/v1/tags
   + POST http://127.0.0.1:8000/api/v1/tags?name=2&state=1&created_by=test
@@ -12,3 +14,4 @@
   + GET：http://127.0.0.1:8000/api/v1/articles/1
   + PUT：http://127.0.0.1:8000/api/v1/articles/1?tag_id=1&title=test-edit1&desc=test-desc-edit&content=test-content-edit&modified_by=test-created-edit&state=0
   + DELETE：http://127.0.0.1:8000/api/v1/articles/1
+* log

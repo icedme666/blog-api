@@ -4,10 +4,10 @@ import (
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
 	"github.com/unknwon/com"
-	"log"
 	"net/http"
 	"xiamei.guo/blog-api/models"
 	"xiamei.guo/blog-api/pkg/e"
+	"xiamei.guo/blog-api/pkg/logging"
 	"xiamei.guo/blog-api/pkg/setting"
 	"xiamei.guo/blog-api/pkg/util"
 )
@@ -41,7 +41,7 @@ func GetArticles(c *gin.Context) {
 		data["total"] = models.GetArticleTotal(maps)
 	} else {
 		for _, err := range valid.Errors {
-			log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
+			logging.Info(err.Key, err.Message)
 		}
 	}
 
@@ -67,7 +67,7 @@ func GetArticle(c *gin.Context) {
 			code = e.SUCCESS
 		} else {
 			for _, err := range valid.Errors {
-				log.Printf("err.Key: %s, err.message: %s", err.Key, err.Message)
+				logging.Error(err.Key, err.Message)
 			}
 		}
 	}
@@ -111,7 +111,7 @@ func AddArticle(c *gin.Context) {
 			code = e.SUCCESS
 		} else {
 			for _, err := range valid.Errors {
-				log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
+				logging.Error(err.Key, err.Message)
 			}
 		}
 	}
@@ -173,7 +173,7 @@ func EditArticle(c *gin.Context) {
 		}
 	} else {
 		for _, err := range valid.Errors {
-			log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
+			logging.Error(err.Key, err.Message)
 		}
 	}
 
@@ -198,7 +198,7 @@ func DeleteArticle(c *gin.Context) {
 			code = e.SUCCESS
 		} else {
 			for _, err := range valid.Errors {
-				log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
+				logging.Error(err.Key, err.Message)
 			}
 		}
 	}

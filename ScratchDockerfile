@@ -1,0 +1,7 @@
+FROM scratch
+
+WORKDIR $GOPATH/src/xiamei.guo/blog-api
+COPY . $GOPATH/src/xiamei.guo/blog-api
+
+EXPOSE 8000
+CMD ["./blog-api"]

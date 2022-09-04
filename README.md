@@ -33,3 +33,19 @@
     7. 旧进程处理完所有旧连接后正常结束
 * swagger
   + http://127.0.0.1:8000/swagger/index.html#/
+
+# deploy
+* docker
+  ```bash
+  docker build -t blog-api .
+  cd deploy/mysql
+  docker build -t blog-mysql .
+  docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -v /Users/xiamei.guo/data/docker-mysql:/var/lib/mysql -d blog-mysql
+  docker run --link mysql:mysql -p 8000:8000 blog-api
+  ```
+* 构建 Scratch 镜像
+  ```bash
+  CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o blog-api .
+  docker build -t blog-api-scratch -f ScratchDockerfile .
+  docker run --link mysql:mysql -p 8000:8000 blog-api-scratch
+  ```

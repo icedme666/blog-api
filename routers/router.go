@@ -4,9 +4,11 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"net/http"
 	"xiamei.guo/blog-api/docs"
 	"xiamei.guo/blog-api/middleware/jwt"
 	"xiamei.guo/blog-api/pkg/setting"
+	"xiamei.guo/blog-api/pkg/upload"
 	"xiamei.guo/blog-api/routers/api"
 	"xiamei.guo/blog-api/routers/api/v1"
 )
@@ -32,9 +34,12 @@ func InitRouter() *gin.Engine {
 	gin.SetMode(setting.ServerSetting.RunMode)
 
 	// use ginSwagger middleware to serve the API docs
+	r.StaticFS("/upload/images", http.Dir(upload.GetImageFullPath())) //读取静态文件
 	r.GET("/test")
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.GET("/auth", api.GetAuth)
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.POST("/upload", api.UploadImage)
+
 	apiv1 := r.Group("/api/v1")
 	apiv1.Use(jwt.JWT())
 	{

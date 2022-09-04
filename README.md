@@ -9,12 +9,14 @@
   + PUT http://127.0.0.1:8000/api/v1/tags/1?name=edit1&state=0&modified_by=edit1
   + DELETE http://127.0.0.1:8000/api/v1/tags/1
 * Article
-  + POST：http://127.0.0.1:8000/api/v1/articles?tag_id=1&title=test1&desc=test-desc&content=test-content&created_by=test-created&state=1
-  + GET：http://127.0.0.1:8000/api/v1/articles
-  + GET：http://127.0.0.1:8000/api/v1/articles/1
-  + PUT：http://127.0.0.1:8000/api/v1/articles/1?tag_id=1&title=test-edit1&desc=test-desc-edit&content=test-content-edit&modified_by=test-created-edit&state=0
+  + POST http://127.0.0.1:8000/api/v1/articles?tag_id=1&title=test1&desc=test-desc&content=test-content&created_by=test-created&state=1
+  + GET http://127.0.0.1:8000/api/v1/articles
+  + GET http://127.0.0.1:8000/api/v1/articles/1
+  + PUT http://127.0.0.1:8000/api/v1/articles/1?tag_id=1&title=test-edit1&desc=test-desc-edit&content=test-content-edit&modified_by=test-created-edit&state=0
   + DELETE：http://127.0.0.1:8000/api/v1/articles/1
-
+* 图片上传
+  + POST http://127.0.0.1:8000/upload，选择form-data，参数为image，格式为图片
+  + GET http://127.0.0.1:8000/upload/images/59b514174bffe4ae402b3d63aad79fe0.jpeg
 # 应用优化
 * log
 * 优雅重启

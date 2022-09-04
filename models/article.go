@@ -68,6 +68,11 @@ func DeleteArticle(id int) bool {
 	return true
 }
 
+func CleanAllArticle() bool {
+	db.Unscoped().Where("deleted_on != ? ", 0).Delete(&Article{}) //硬删除要使用 Unscoped()，这是 GORM 的约定
+	return true
+}
+
 func (article *Article) BeforeCreate(scope *gorm.Scope) error {
 	scope.SetColumn("CreatedOn", time.Now().Unix())
 	return nil

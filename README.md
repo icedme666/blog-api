@@ -33,6 +33,15 @@
     7. 旧进程处理完所有旧连接后正常结束
 * swagger
   + http://127.0.0.1:8000/swagger/index.html#/
+* 通过gorm实现callbacks
+  + 文档：https://gorm.io/docs/write_plugins.html
+  + 通过回调实现更新created_on、modified_on字段和软删除
+* corn
+  + 通过corn实现定时任务清理无效数据
+  + 运行
+    ```bash
+    go run cron.go
+    ```
 
 # deploy
 * docker

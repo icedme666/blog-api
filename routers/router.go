@@ -45,10 +45,10 @@ func InitRouter() *gin.Engine {
 		apiv1.POST("/tags", v1.AddTags)
 
 		//修改文章标签
-		apiv1.PUT("/tags", v1.EditTag)
+		apiv1.PUT("/tags/:id", v1.EditTag)
 
 		//删除文章标签
-		apiv1.DELETE("/articles", v1.DeleteTag)
+		apiv1.DELETE("/tags/:id", v1.DeleteTag)
 
 		//获取文章列表
 		apiv1.GET("/articles", v1.GetArticles)

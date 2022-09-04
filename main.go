@@ -1,14 +1,12 @@
 package main
 
 import (
-	"context"
 	"fmt"
+	"github.com/fvbock/endless"
 	"log"
-	"net/http"
-	"os"
-	"os/signal"
 	"syscall"
-	"time"
+	"xiamei.guo/blog-api/models"
+	"xiamei.guo/blog-api/pkg/logging"
 	"xiamei.guo/blog-api/pkg/setting"
 	"xiamei.guo/blog-api/routers"
 )
@@ -30,32 +28,23 @@ import (
 
 // @securityDefinitions.basic  BasicAuth
 func main() {
-	router := routers.InitRouter()
-	s := &http.Server{
-		Addr:           fmt.Sprintf(":%d", setting.HTTPPort),
-		Handler:        router,
-		ReadTimeout:    setting.ReadTimeout,
-		WriteTimeout:   setting.WriteTimeout,
-		MaxHeaderBytes: 1 << 20,
+	//将多模块的初始化函数放到启动流程中
+	setting.Setup()
+	models.Setup()
+	logging.Setup()
+
+	endless.DefaultReadTimeOut = setting.ServerSetting.ReadTimeout
+	endless.DefaultWriteTimeOut = setting.ServerSetting.WriteTimeout
+	endless.DefaultMaxHeaderBytes = 1 << 20
+	endPoint := fmt.Sprintf(":%d", setting.ServerSetting.HttpPort)
+
+	server := endless.NewServer(endPoint, routers.InitRouter())
+	server.BeforeBegin = func(add string) {
+		log.Printf("Actual pid is %d", syscall.Getpid())
 	}
 
-	go func() {
-		if err := s.ListenAndServe(); err != nil {
-			log.Printf("Listen: %s\n", err)
-			log.Printf("Actual pid is %d", syscall.Getpid())
-		}
-	}()
-
-	quit := make(chan os.Signal)
-	signal.Notify(quit, os.Interrupt)
-	<-quit
-
-	log.Printf("Shutdown Server ...")
-
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	if err := s.Shutdown(ctx); err != nil {
-		log.Fatal("Server Shutdown:", err)
+	err := server.ListenAndServe()
+	if err != nil {
+		log.Printf("Server err: %v", err)
 	}
-	log.Println("Server exiting")
 }

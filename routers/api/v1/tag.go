@@ -27,7 +27,7 @@ func GetTags(c *gin.Context) { //上下文，它允许我们在中间件之间�
 		maps["state"] = state
 	}
 	code := e.SUCCESS //使用了e模块的错误编码
-	data["lists"] = models.GetTags(util.GetPage(c), setting.PageSize, maps)
+	data["lists"] = models.GetTags(util.GetPage(c), setting.AppSetting.PageSize, maps)
 	data["total"] = models.GetTagTotal(maps)
 
 	c.JSON(http.StatusOK, gin.H{

@@ -28,9 +28,14 @@ const (
 	FATAL
 )
 
-func init() {
+func Setup() {
+	var err error
 	filePath := getLogFileFullPath()
-	F = openLogFile(filePath)
+	fileName := getLogFileName()
+	F, err = openLogFile(fileName, filePath)
+	if err != nil {
+		log.Fatalln(err)
+	}
 	//创建一个新的日志记录器。out定义要写入日志数据的IO句柄。prefix定义每个生成的日志行的开头。flag定义了日志记录属性
 	logger = log.New(F, DefaultPrefix, log.LstdFlags) //log.LstdFlags：日志记录的格式属性之一
 	logger.Println("log is start...")

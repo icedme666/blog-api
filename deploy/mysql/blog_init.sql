@@ -31,6 +31,7 @@ CREATE TABLE `blog_article` (
                                 `tag_id` int(10) unsigned DEFAULT 0 COMMENT '标签ID',
                                 `title` varchar(100) DEFAULT '' COMMENT '文章标题',
                                 `desc` varchar(255) DEFAULT '' COMMENT '简述',
+                                `cover_image_url` varchar(255) DEFAULT '' COMMENT '图片地址',
                                 `content` text DEFAULT NULL,
                                 `created_on` int(11) DEFAULT NULL,
                                 `created_by` varchar(100) DEFAULT '' COMMENT '创建人',

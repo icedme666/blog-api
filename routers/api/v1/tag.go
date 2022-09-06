@@ -12,6 +12,7 @@ import (
 )
 
 // 获取多个文章标签
+
 func GetTags(c *gin.Context) { //上下文，它允许我们在中间件之间传递变量、管理流、验证请求的 JSON 和呈现 JSON 响应
 	name := c.Query("name") //c.Query用于获取url参数，c.DefaultQuery则支持设置一个默认值
 	maps := make(map[string]interface{})
@@ -44,6 +45,7 @@ func GetTags(c *gin.Context) { //上下文，它允许我们在中间件之间�
 // @Param created_by query int false "CreatedBy"
 // @Success 200 {string} json "{"code":200,"data":{},"msg":"ok"}"
 // @Router /api/v1/tags [post]
+
 func AddTags(c *gin.Context) {
 	name := c.Query("name")
 	state := com.StrTo(c.DefaultQuery("state", "0")).MustInt()
@@ -81,6 +83,7 @@ func AddTags(c *gin.Context) {
 // @Param modified_by query string true "ModifiedBy"
 // @Success 200 {string} json "{"code":200,"data":{},"msg":"ok"}"
 // @Router /api/v1/tags/{id} [put]
+
 func EditTag(c *gin.Context) {
 	id := com.StrTo(c.Param("id")).MustInt()
 	name := c.Query("name")
@@ -124,6 +127,7 @@ func EditTag(c *gin.Context) {
 }
 
 // 删除文章标签
+
 func DeleteTag(c *gin.Context) {
 	id := com.StrTo(c.Param("id")).MustInt()
 	valid := validation.Validation{}

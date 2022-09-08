@@ -1,5 +1,7 @@
 package models
 
+import "github.com/jinzhu/gorm"
+
 type Tag struct { //用于Gorm的使用。并给予了附属属性json，这样子在c.JSON的时候就会自动转换格式
 	Model
 	Name       string `json:"name"`
@@ -8,9 +10,21 @@ type Tag struct { //用于Gorm的使用。并给予了附属属性json，这样�
 	State      int    `json:"state"`
 }
 
-func GetTags(pageNum int, pageSize int, maps interface{}) (tags []Tag) {
-	db.Where(maps).Offset(pageNum).Limit(pageSize).Find(&tags)
-	return
+func GetTags(pageNum int, pageSize int, maps interface{}) ([]Tag, error) {
+	var (
+		tags []Tag
+		err  error
+	)
+
+	if pageSize > 0 && pageNum > 0 {
+		err = db.Where(maps).Find(&tags).Offset(pageNum).Limit(pageSize).Error
+	} else {
+		err = db.Where(maps).Find(&tags).Error
+	}
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
+	return tags, nil
 }
 
 func GetTagTotal(maps interface{}) (count int) {

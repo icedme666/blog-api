@@ -6,9 +6,13 @@ import (
 	"github.com/unknwon/com"
 	"net/http"
 	"xiamei.guo/blog-api/models"
+	"xiamei.guo/blog-api/pkg/app"
 	"xiamei.guo/blog-api/pkg/e"
+	"xiamei.guo/blog-api/pkg/export"
+	"xiamei.guo/blog-api/pkg/logging"
 	"xiamei.guo/blog-api/pkg/setting"
 	"xiamei.guo/blog-api/pkg/util"
+	"xiamei.guo/blog-api/service/tag_service"
 )
 
 // 获取多个文章标签
@@ -28,7 +32,11 @@ func GetTags(c *gin.Context) { //上下文，它允许我们在中间件之间�
 		maps["state"] = state
 	}
 	code := e.SUCCESS //使用了e模块的错误编码
-	data["lists"] = models.GetTags(util.GetPage(c), setting.AppSetting.PageSize, maps)
+	var err error
+	data["lists"], err = models.GetTags(util.GetPage(c), setting.AppSetting.PageSize, maps)
+	if err != nil {
+		code = e.ERROR
+	}
 	data["total"] = models.GetTagTotal(maps)
 
 	c.JSON(http.StatusOK, gin.H{
@@ -148,4 +156,45 @@ func DeleteTag(c *gin.Context) {
 		"msg":  e.GetMsg(code),
 		"data": make(map[string]string),
 	})
+}
+
+func ExportTag(c *gin.Context) {
+	appG := app.Gin{C: c}
+	name := c.PostForm("name")
+	state := -1
+	if arg := c.PostForm("state"); arg != "" {
+		state = com.StrTo(arg).MustInt()
+	}
+	tagService := tag_service.Tag{
+		Name:  name,
+		State: state,
+	}
+	filename, err := tagService.Export()
+	if err != nil {
+		appG.Response(http.StatusOK, e.ERROR_EXPORT_TAG_FAIL, nil)
+		return
+	}
+	appG.Response(http.StatusOK, e.SUCCESS, map[string]string{
+		"export_url":      export.GetExcelFullUrl(filename),
+		"export_save_utl": export.GetExcelPath() + filename,
+	})
+}
+
+func ImportTag(c *gin.Context) {
+	appG := app.Gin{C: c}
+
+	file, _, err := c.Request.FormFile("file")
+	if err != nil {
+		logging.Warn(err)
+		appG.Response(http.StatusOK, e.ERROR, nil)
+	}
+
+	tagService := tag_service.Tag{}
+	err = tagService.Import(file)
+	if err != nil {
+		logging.Warn(err)
+		appG.Response(http.StatusOK, e.ERROR_IMPORT_TAG_FAIL, nil)
+		return
+	}
+	appG.Response(http.StatusOK, e.SUCCESS, nil)
 }

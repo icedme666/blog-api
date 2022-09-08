@@ -6,7 +6,7 @@ import (
 	"log"
 	"syscall"
 	"xiamei.guo/blog-api/models"
-	"xiamei.guo/blog-api/pkg/logging"
+	"xiamei.guo/blog-api/pkg/gredis"
 	"xiamei.guo/blog-api/pkg/setting"
 	"xiamei.guo/blog-api/routers"
 )
@@ -31,7 +31,8 @@ func main() {
 	//将多模块的初始化函数放到启动流程中
 	setting.Setup()
 	models.Setup()
-	logging.Setup()
+	gredis.Setup()
+	//logging.Setup()
 
 	endless.DefaultReadTimeOut = setting.ServerSetting.ReadTimeout
 	endless.DefaultWriteTimeOut = setting.ServerSetting.WriteTimeout

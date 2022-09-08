@@ -7,10 +7,10 @@ import (
 	"xiamei.guo/blog-api/models"
 )
 
-func main() {
+func corn() {
 	log.Println("Starting...")
 
-	c := cron.New() //会根据本地时间创建一个新（空白）的 Cron job runner。会首先解析时间表，如果填写有问题会直接 err，无误则将 func 添加到 Schedule 队列中等待执行
+	c := cron.New()                   //会根据本地时间创建一个新（空白）的 Cron job runner。会首先解析时间表，如果填写有问题会直接 err，无误则将 func 添加到 Schedule 队列中等待执行
 	c.AddFunc("* * * * * *", func() { //AddFunc 会向 Cron job runner 添加一个 func ，以按给定的时间表运行
 		log.Println("Run models.CleanAllTag...")
 		models.CleanAllTag()

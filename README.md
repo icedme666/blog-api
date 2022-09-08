@@ -17,6 +17,11 @@
 * 图片上传
   + POST http://127.0.0.1:8000/upload，选择form-data，参数为image，格式为图片
   + GET http://127.0.0.1:8000/upload/images/59b514174bffe4ae402b3d63aad79fe0.jpeg
+* excel导出、导入
+  + POST http://127.0.0.1:8000/tags/export
+  + POST http://127.0.0.1:8000/tags/import，选择form-data，参数为file，格式为excel
+
+
 # 应用优化
 * log
 * 优雅重启
@@ -48,6 +53,7 @@
   + 在 Go 中，当存在多个 init 函数时，执行顺序为： 
     - 相同包下的 init 函数：按照源文件编译顺序决定执行顺序（默认按文件名排序）
     - 不同包下的 init 函数：按照包导入的依赖关系决定先后顺序
+* redis
 
 # deploy
 * docker

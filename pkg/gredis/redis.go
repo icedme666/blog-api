@@ -59,7 +59,7 @@ func Set(key string, data interface{}, time int) error {
 }
 
 func Exists(key string) bool {
-	conn := RedisConn.Get() //// 在连接池中获取一个活跃连接
+	conn := RedisConn.Get() // 在连接池中获取一个活跃连接
 	defer conn.Close()
 
 	exists, err := redis.Bool(conn.Do("EXISTS", key)) //bool:将命令返回转为布尔值

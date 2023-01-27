@@ -61,8 +61,8 @@
   docker build -t blog-api .
   cd deploy/mysql
   docker build -t blog-mysql .
-  docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -v /Users/xiamei.guo/data/docker-mysql:/var/lib/mysql -d blog-mysql
-  docker run --link mysql:mysql -p 8000:8000 blog-api
+  docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -v /Users/iced_me/data/docker-mysql:/var/lib/mysql -d blog-mysql
+  docker run --link mysql:mysql -p 8000:8000 blog-api -e MYSQL_ROOT_PASSWORD=123456
   ```
 * 构建 Scratch 镜像
   ```bash
